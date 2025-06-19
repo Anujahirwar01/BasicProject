@@ -1,4 +1,4 @@
-import userModel from '../models/user.model.js';
+import userModel from '../model/user.model.js';
 
 
 export const createUser = async ({email,password}) => {
@@ -11,5 +11,5 @@ export const createUser = async ({email,password}) => {
         email,
         password: hashedPassword
     });
-    return await user;
+    return user.save();
 };

@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import connectDB from './db/db.js';
 import userRoutes from './routes/user.routes.js';
@@ -16,6 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 // Middleware for cookie parsing
 app.use(cookieParser());
+
+app.use('/users', userRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
