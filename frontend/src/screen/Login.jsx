@@ -32,7 +32,7 @@ const Login = () => {
         }
 
         // Successful login
-        navigate("/home");
+        navigate("/");
     };
 
     return (

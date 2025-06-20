@@ -32,7 +32,7 @@ const Register = () => {
         localStorage.setItem("users", JSON.stringify(users));
 
         // Redirect to login
-        navigate("/home");
+        navigate("/");
     };
 
     return (
