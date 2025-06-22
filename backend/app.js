@@ -15,7 +15,13 @@ app.use(express.json());
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 // Middleware for CORS
-app.use(cors());
+// import cors from "cors";
+
+app.use(cors({
+  origin: "http://localhost:5173", // ✅ Vite dev server default port
+  credentials: true,
+}));
+
 // Middleware for cookie parsing
 app.use(cookieParser());
 
