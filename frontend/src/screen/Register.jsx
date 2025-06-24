@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAuth } from "../context/authContext"; // ✅ Import useAuth
 
 const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,14 +30,14 @@ const Register = () => {
       // 1. Register
       await axios.post(
         "http://localhost:5000/users/register",
-        { email, password },
+        { name , email, password },
         { withCredentials: true }
       );
 
       // 2. Login
       const res = await axios.post(
         "http://localhost:5000/users/login",
-        { email, password },
+        { name,email, password },
         { withCredentials: true }
       );
 
@@ -57,6 +58,14 @@ const Register = () => {
         <h1 className="text-3xl font-bold text-black mb-6 text-center">Register</h1>
         {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
         <form onSubmit={handleSubmit}>
+          <label className="block text-black mb-2">Name</label>
+<input
+  type="text"
+  className="w-full px-3 py-2 mb-4 border border-black rounded"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  required
+/>
           <label className="block text-black mb-2">Email</label>
           <input
             type="email"

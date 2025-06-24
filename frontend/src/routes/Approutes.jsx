@@ -6,6 +6,8 @@ import Tag from "../screen/Tag";
 import Users from "../screen/Users";
 import Questions from "../screen/Questions";
 import AskQuestion from "../screen/AskQuestion";
+import Profile from "../screen/Profile";
+import EditProfile from "../screen/Editprofile";
 import { Routes, Route,BrowserRouter } from "react-router-dom";
 
 
@@ -19,8 +21,10 @@ const AppRoutes = () => {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/tag" element={<Tag/>}/>
                 <Route path="/questions" element={<Questions/>}/>
-                <Route path="/usr" element={<Users/>}/>
+                <Route path="/users" element={<Users/>}/>
                 <Route path="/AskQuestion" element={<AskQuestion/>}/>
+                <Route path="/users/:id" element={<Profile/>}/>
+                <Route path="/users/:id/edit" element={<EditProfile />} />
             </Routes>
         </BrowserRouter>
     )

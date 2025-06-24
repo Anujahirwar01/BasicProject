@@ -27,7 +27,7 @@ const Sidebar = () => {
           Tag
         </NavLink>
                 <NavLink
-          to="/usr"
+          to="/users"
           className="px-4 py-2 rounded-md hover:bg-white transition"
         >
             <i className="ri-user-line"></i>
