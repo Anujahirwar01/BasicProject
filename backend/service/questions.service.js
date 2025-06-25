@@ -1,7 +1,7 @@
 // services/question.service.js
-import questionModel from '../models/question.model.js';
+import questionModel from '../model/question.model.js';
 
-export const createQuestion = async (questionData) => {
-  const question = new questionModel(questionData);
+export const createQuestion = async (data) => {
+  const question = new questionModel(data);
   return await question.save();
 };

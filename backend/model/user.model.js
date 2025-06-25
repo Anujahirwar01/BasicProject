@@ -26,7 +26,18 @@ const userSchema = new mongoose.Schema({
     minLength: [6, 'Password must be at least 6 characters long'],
     maxLength: [100, 'Password must be at most 100 characters long']
   },
+
+  // ✅ Add these two fields:
+  description: {
+    type: String,
+    default: ""
+  },
+  tags: {
+    type: [String],
+    default: []
+  }
 });
+
 
 
 // Hash password before saving

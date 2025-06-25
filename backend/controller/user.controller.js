@@ -104,10 +104,14 @@ export const getUserProfileController = async (req, res) => {
 }
 export const getUserByIdController = async (req, res) => {
   try {
-    const user = await userModel.findById(req.params.id).select('name email createdAt');
+    const user = await userModel
+      .findById(req.params.id)
+      .select('name email description tags createdAt'); // ✅ Include description and tags
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+
     res.status(200).json({ user });
   } catch (error) {
     console.error(error);
@@ -115,42 +119,44 @@ export const getUserByIdController = async (req, res) => {
   }
 };
 
+
 // controller/user.controller.js
 export const updateUserController = async (req, res) => {
+
   try {
-    const userId = req.params.id;
+    const { name, description, tags } = req.body;
 
-    // Only allow users to update their own profile
-    if (req.user._id.toString() !== userId) {
-      return res.status(403).json({ error: "Unauthorized to edit this profile" });
-    }
+    const user = await userModel.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    const { name, email } = req.body;
+    user.name = name ?? user.name;
+    user.description = description ?? user.description;
+    user.tags = tags ?? user.tags;
 
-    const updatedUser = await userModel.findByIdAndUpdate(
-      userId,
-      { name, email },
-      { new: true, runValidators: true }
-    );
+    await user.save();
 
-    res.status(200).json({
-      user: updatedUser,
-      message: "Profile updated successfully"
-    });
-  } catch (error) {
-    console.error("Update error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(200).json({ user });
+  } catch (err) {
+    console.error("Update error:", err);
+    res.status(500).json({ error: "Server error while updating profile" });
   }
 };
 
 
-export const logoutUserController = async (req,res) => {
-    try{
-        res.clearCookie('token');
-        res.status(200).json({message: 'Logged out successfully'});
-    }
-    catch(error){
-        console.log(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-}
+
+export const logoutUserController = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "Lax",
+      secure: false, // should be true in production
+    });
+
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
