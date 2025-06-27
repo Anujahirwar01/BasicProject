@@ -17,9 +17,15 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
-    await axios.post("http://localhost:5000/users/logout", {}, { withCredentials: true });
+  try {
+    await axios.get("http://localhost:5000/users/logout", {
+      withCredentials: true,
+    });
     setUser(null);
-  };
+  } catch (err) {
+    console.error("Logout failed", err);
+  }
+};
 
   return (
     <AuthContext.Provider value={{ user, setUser, logout }}>

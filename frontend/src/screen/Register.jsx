@@ -37,7 +37,7 @@ const Register = () => {
       // 2. Login
       const res = await axios.post(
         "http://localhost:5000/users/login",
-        { name,email, password },
+        { email, password },
         { withCredentials: true }
       );
 

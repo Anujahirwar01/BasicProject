@@ -13,7 +13,7 @@ import { Routes, Route,BrowserRouter } from "react-router-dom";
 
 const AppRoutes = () => {
     return (
-        <BrowserRouter>
+
             <Routes>
                 
                 <Route path="/" element={<Home/>}/>
@@ -26,7 +26,7 @@ const AppRoutes = () => {
                 <Route path="/users/:id" element={<Profile/>}/>
                 <Route path="/users/:id/edit" element={<EditProfile />} />
             </Routes>
-        </BrowserRouter>
+       
     )
 }
 

@@ -30,30 +30,54 @@ const UserProfile = () => {
       <div className="flex flex-1">
         <Sidebar />
         <main className="px-70 py-6 mt-[64px] flex space-x-4">
-          {/* Profile avatar */}
-          <div className="bg-blue-500 text-white rounded-full h-12 w-12 flex items-center justify-center text-lg font-bold">
-            {user.name?.charAt(0).toUpperCase()}
-          </div>
+  {/* Profile avatar */}
+  <div className="bg-blue-500 text-white rounded-full h-12 w-12 flex items-center justify-center text-lg font-bold">
+    {user.name?.charAt(0).toUpperCase()}
+  </div>
 
-          {/* User details */}
-          <div>
-            <h1 className="text-2xl font-bold mb-1">{user.name}</h1>
-            <p className="text-gray-600 mb-1">Email: {user.email}</p>
-            <p className="text-gray-600">
-              Joined: {new Date(user.createdAt).toLocaleString()}
-            </p>
+  {/* User details */}
+  <div>
+    <h1 className="text-2xl font-bold mb-1">{user.name}</h1>
+    <p className="text-gray-600 mb-1">Email: {user.email}</p>
+    <p className="text-gray-600">
+      Joined: {new Date(user.createdAt).toLocaleString()}
+    </p>
 
-            {/* Show edit button only if logged-in user matches profile ID */}
-            {loggedInUser && loggedInUser._id === user._id && (
-              <Link
-                to={`/users/${user._id}/edit`}
-                className="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-              >
-                Edit Profile
-              </Link>
-            )}
-          </div>
-        </main>
+    {/* ✅ Add this */}
+    {user.description && (
+      <p className="text-gray-800 mt-3">
+        <span className="font-semibold">Description:</span> {user.description}
+      </p>
+    )}
+
+    {user.tags && user.tags.length > 0 && (
+      <div className="mt-2">
+        <span className="font-semibold text-gray-700">Tags:</span>
+        <div className="flex flex-wrap gap-2 mt-1">
+          {user.tags.map((tag, index) => (
+            <span
+              key={index}
+              className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* Edit button */}
+    {loggedInUser && loggedInUser._id === user._id && (
+      <Link
+        to={`/users/${user._id}/edit`}
+        className="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+      >
+        Edit Profile
+      </Link>
+    )}
+  </div>
+</main>
+
       </div>
     </div>
   );

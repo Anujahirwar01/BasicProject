@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../context/authContext";
 import axios from "axios";
+import Header from "../layouts/header";
+import Sidebar from "../layouts/navbar";
 import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const { user, setUser } = useAuth();
   const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
+  const [email] = useState(user?.email || "");
+  const [description, setDescription] = useState(user?.description || "");
+  const [tags, setTags] = useState(user?.tags?.join(", ") || "");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -17,7 +21,11 @@ const EditProfile = () => {
     try {
       const res = await axios.put(
         `http://localhost:5000/users/${user._id}`,
-        { name, email },
+        {
+          name,
+          description,
+          tags: tags.split(",").map(tag => tag.trim()),
+        },
         { withCredentials: true }
       );
 
@@ -28,36 +36,93 @@ const EditProfile = () => {
     }
   };
 
+  const parsedTags = tags.split(",").map(tag => tag.trim()).filter(Boolean);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleUpdate} className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <Header />
+      <div className="flex flex-1">
+        <Sidebar />
 
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        <div className="min-h-screen flex items-center px-6 sm:px-10 justify-center w-full">
+          <form
+            onSubmit={handleUpdate}
+            className="bg-white p-8 sm:p-10 rounded-2xl shadow-md w-full max-w-xl"
+          >
+            <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+              Edit Profile
+            </h2>
 
-        <label className="block mb-2">Name</label>
-        <input
-          type="text"
-          className="w-full px-3 py-2 border rounded mb-4"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+            {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        <label className="block mb-2">Email</label>
-        <input
-          type="email"
-          className="w-full px-3 py-2 border rounded mb-4"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+            {/* Display Name */}
+            <div className="mb-4">
+              <label className="block font-medium mb-1">Display Name</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border rounded"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
 
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Save Changes
-        </button>
-      </form>
+            {/* Email */}
+            <div className="mb-4">
+              <label className="block font-medium mb-1">Email (not editable)</label>
+              <input
+                type="email"
+                className="w-full px-3 py-2 border rounded bg-gray-100 text-gray-600 cursor-not-allowed"
+                value={email}
+                readOnly
+              />
+            </div>
+
+            {/* Description */}
+            <div className="mb-4">
+              <label className="block font-medium mb-1">Description</label>
+              <textarea
+                className="w-full px-3 py-2 border rounded"
+                rows={3}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+
+            {/* Tags */}
+            <div className="mb-2">
+              <label className="block font-medium mb-1">Tags (comma-separated)</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border rounded"
+                placeholder="e.g. fullstack, react, dev"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+              />
+            </div>
+
+            {/* Tag preview */}
+            {parsedTags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2 mb-6">
+                {parsedTags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            >
+              Save Changes
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

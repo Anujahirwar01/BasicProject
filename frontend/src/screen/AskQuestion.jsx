@@ -1,10 +1,15 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Header from "../layouts/header";
-import { Link } from "react-router-dom";
 
 const AskQuestionForm = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleTagKeyDown = (e) => {
     if ((e.key === "Enter" || e.key === " " || e.key === ",") && tagInput.trim()) {
@@ -20,74 +25,93 @@ const AskQuestionForm = () => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const res = await axios.post("http://localhost:5000/questions/AskQuestion", {
+  title,
+  description,
+  tags,
+}, { withCredentials: true });
+
+      console.log("Success:", res.data);
+      navigate("/"); // redirect to homepage
+    } catch (err) {
+      console.error(err);
+      setError("Failed to post question");
+    }
+  };
+
   return (
-    <div className="">
-      <Header className="sticky " />
-      <div className="max-w-3xl mx-auto mt-10 p-6 border border-gray-300 rounded-md bg-white-800 shadow">
-        <h1 className="text-5xl font-bold font-semibold mb-6">Ask a public question</h1>
+    <div>
+      <Header />
+      <div className="max-w-3xl mx-auto mt-10 p-6 border rounded-md bg-white shadow">
+        <h1 className="text-3xl font-bold mb-6">Ask a public question</h1>
 
-        {/* Title */}
-        <div className="mb-6">
-          <label className="font-bold block mb-1">Title</label>
-          <p className="text-sm text-gray-600 mb-2">
-            Be specific and imagine you’re asking a question to another person
-          </p>
-          <input
-            type="text"
-            placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        {/* Body */}
-        <div className="mb-6">
-          <label className="font-bold block mb-1">Body</label>
-          <p className="text-sm text-gray-600 mb-2">
-            Include all the information someone would need to answer your question
-          </p>
-          <textarea
-            rows="6"
-            className="w-full p-2 border border-gray-300 rounded resize-y focus:outline-none focus:ring-2 focus:ring-blue-500"
-          ></textarea>
-        </div>
-
-        {/* Tags */}
-        <div className="mb-6">
-          <label className="font-bold block mb-1">Tags</label>
-          <p className="text-sm text-gray-600 mb-2">
-            Add up to 5 tags to describe what your question is about <br />
-            e.g. <code>(xml typescript wordpress)</code>
-          </p>
-          <div className="flex flex-wrap gap-2 p-2 border border-gray-300 rounded">
-            {tags.map((tag, index) => (
-              <span
-                key={index}
-                className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm flex items-center"
-              >
-                {tag}
-                <button
-                  onClick={() => removeTag(tag)}
-                  className="ml-2 text-red-600 font-bold hover:text-red-800"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
+        <form onSubmit={handleSubmit}>
+          {/* Title */}
+          <div className="mb-6">
+            <label className="font-bold block mb-1">Title</label>
             <input
               type="text"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleTagKeyDown}
-              placeholder="Type and press Enter..."
-              className="flex-1 min-w-[120px] p-1 outline-none"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. How to center a div in CSS?"
+              className="w-full p-2 border rounded"
+              required
             />
           </div>
-        </div>
 
-        {/* Submit Button */}
-        <Link to='/' className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-          Post Your Question
-        </Link>
+          {/* Description */}
+          <div className="mb-6">
+            <label className="font-bold block mb-1">Body</label>
+            <textarea
+              rows="6"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full p-2 border rounded resize-y"
+              required
+            />
+          </div>
+
+          {/* Tags */}
+          <div className="mb-6">
+            <label className="font-bold block mb-1">Tags</label>
+            <div className="flex flex-wrap gap-2 p-2 border rounded">
+              {tags.map((tag, index) => (
+                <span key={index} className="bg-blue-100 px-2 py-1 rounded text-sm">
+                  {tag}
+                  <button
+                    onClick={() => removeTag(tag)}
+                    className="ml-2 text-red-600 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+              <input
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleTagKeyDown}
+                placeholder="Press Enter to add tag"
+                className="flex-1 p-1 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            Post Your Question
+          </button>
+        </form>
       </div>
     </div>
   );
