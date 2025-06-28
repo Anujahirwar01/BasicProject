@@ -12,7 +12,7 @@ const Home = () => {
     const fetchQuestions = async () => {
       try {
         const res = await axios.get("http://localhost:5000/questions");
-        setQuestions(res.data);
+        setQuestions(res.data); // Make sure backend returns an array of questions
       } catch (err) {
         console.error("Error fetching questions:", err);
       }
@@ -48,64 +48,69 @@ const Home = () => {
       <Navbar />
 
       <div className="flex justify-between p-10">
+        {/* Left Section - Questions */}
         <div className="w-3/4">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-semibold">Top Questions</h1>
+          <div className="flex justify-between ml-4 gap-0 items-center mb-6">
+            <h1 className="text-3xl ml-30 mt-4 font-semibold">All Questions</h1>
             <Link
               to="/AskQuestion"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+              className="bg-blue-500 hover:bg-blue-600 mt-5 text-white px-7 py-2 rounded"
             >
-              Ask Question
+              Ask a Question
             </Link>
           </div>
 
-          <p className="mb-4">{questions.length} questions</p>
+          <p className="mb-1">{questions.length} questions</p>
 
-          <div>
+          <div className="space-y-4">
             {questions.map((q) => (
               <div
                 key={q._id}
-                className="flex bg-yellow-50 border-b py-4 px-4 hover:bg-yellow-100 transition"
+                className="flex flex-col ml-20 bg-yellow-50 border-b py-4 px-6 w-full hover:bg-yellow-100 transition"
               >
-                {/* Stats */}
-                <div className="w-1/6 text-sm text-gray-700 text-center">
-                  <p>{q.upVotes?.length || 0} votes</p>
-                  <p>{q.answers?.length || 0} answers</p>
-                </div>
-
-                {/* Question Content */}
-                <div className="w-5/6">
-                  <Link
-                    to={`/question/${q._id}`}
-                    className="text-blue-700 text-lg font-semibold hover:underline"
-                  >
-                    {q.question}
-                  </Link>
-
-                  {/* Tags */}
-                  <div className="mt-1 flex flex-wrap gap-2">
-                    {q.tags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="bg-gray-200 text-sm px-2 py-1 rounded"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                <div className="flex items-start space-x-6">
+                  {/* Stats */}
+                  <div className="w-1/6 text-sm ml-40 text-gray-700 text-center">
+                    <p>{q.upVotes?.length || 0} votes</p>
+                    <p>{q.answers?.length || 0} answers</p>
                   </div>
 
-                  {/* Meta info */}
-                  <p className="text-xs text-gray-600 mt-1">
-                    asked {formatTimeAgo(q.askedOn)} by{" "}
-                    {q.userPosted?.name || q.userPosted || "anonymous"}
-                  </p>
+                  {/* Question Content */}
+                  <div className="w-5/6">
+                    {/* Question Title Link */}
+                    <Link
+                      to={`/question/${q._id}`}
+                      className="text-blue-700 text-lg font-semibold hover:underline"
+                    >
+                      {q.title}
+                    </Link>
+
+                    {/* Tags */}
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {q.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="bg-gray-200 text-sm px-2 py-1 rounded"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Meta Info */}
+                    <p className="text-xs text-gray-600 mt-2">
+                      asked {formatTimeAgo(q.askedOn)} by{" "}
+                      {q.userPosted?.name || q.userPosted || "anonymous"}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="w-1/4 pl-6">
+        {/* Right Section - Sidebar */}
+        <div className="w-1/4 mr-12.5 mt-5 pl-6">
           <Sidebar />
         </div>
       </div>

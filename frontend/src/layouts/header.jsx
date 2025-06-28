@@ -13,12 +13,13 @@ const Header = () => {
         {/* Left: Logo + Navigation */}
         <div className="flex items-center space-x-6">
           <Link to="/">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
-              alt="Logo"
-              className="h-10 w-10 object-contain"
-            />
-          </Link>
+  <img
+    src="/logo.svg" // ← your local logo file from /public folder
+    alt="Logo"
+    className="h-10 w-10  object-contain"
+  />
+</Link>
+
 
           <Link to="/" className="text-black font-medium hover:bg-gray-100 rounded">About</Link>
           <Link to="/" className="text-black font-medium hover:bg-gray-100 rounded">Products</Link>

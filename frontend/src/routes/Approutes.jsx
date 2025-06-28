@@ -9,6 +9,7 @@ import AskQuestion from "../screen/AskQuestion";
 import Profile from "../screen/Profile";
 import EditProfile from "../screen/Editprofile";
 import { Routes, Route,BrowserRouter } from "react-router-dom";
+import QuestionInterface from "../screen/QuestionInterface";
 
 
 const AppRoutes = () => {
@@ -25,6 +26,7 @@ const AppRoutes = () => {
                 <Route path="/AskQuestion" element={<AskQuestion/>}/>
                 <Route path="/users/:id" element={<Profile/>}/>
                 <Route path="/users/:id/edit" element={<EditProfile />} />
+                <Route path="/question/:id" element={<QuestionInterface />} />
             </Routes>
        
     )
