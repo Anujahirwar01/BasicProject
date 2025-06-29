@@ -1,4 +1,3 @@
-// routes/question.route.js
 import { Router } from 'express';
 import * as questionController from '../controller/questions.controller.js';
 import { body } from 'express-validator';
@@ -18,7 +17,17 @@ router.post(
   questionController.AskQuestion
 );
 
-router.get('/', questionController.getAllQuestions);
+router.get("/", questionController.getAllQuestions);
+router.get("/:id", questionController.getQuestionById);
+router.post("/:id/upvote", authMiddleware.authMiddleware, questionController.upvoteQuestion);
+router.post("/:id/answer", authMiddleware.authMiddleware, questionController.postAnswer);
+
+// ✅ New DELETE route for removing an answer (only by owner)
+router.delete(
+  "/:questionId/answer/:answerId",
+  authMiddleware.authMiddleware,
+  questionController.deleteAnswer
+);
 
 
 export default router;

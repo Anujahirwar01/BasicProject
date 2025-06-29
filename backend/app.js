@@ -26,9 +26,10 @@ app.use(cors({
 // Middleware for cookie parsing
 app.use(cookieParser());
 
-app.use('/users', userRoutes);
+app.use("/users", userRoutes); //
 
 app.use('/questions', questionRoutes); // ✅ endpoint will be /questions/AskQuestion
+// app.use('/questions', questionRoutes);
 
 
 app.get('/', (req, res) => {

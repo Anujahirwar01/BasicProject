@@ -35,6 +35,7 @@ router.get("/", userController.getAllUsersController);
 
 // ✅ STATIC ROUTES FIRST
 router.get('/profile', authMiddleware.authMiddleware, userController.getUserProfileController);
+
 router.get('/logout', userController.logoutUserController);
 
 // ✅ DYNAMIC ROUTE LAST
