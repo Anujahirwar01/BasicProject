@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 h-screen bg-gray-100 p-6 fixed top-0 left-0 mt-[64px] shadow-md">
+    <aside className="w-64 h-screen bg-gray-100 p-6 fixed top-0 left-0 mt-[69px] shadow-md">
       <nav className="flex flex-col space-y-4">
         <NavLink
           to="/"

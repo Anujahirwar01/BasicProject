@@ -71,8 +71,8 @@ const Home = () => {
                 <div className="flex items-start space-x-6">
                   {/* Stats */}
                   <div className="w-1/6 text-sm ml-40 text-gray-700 text-center">
-                    <p>{q.upVotes?.length || 0} votes</p>
-                    <p>{q.answers?.length || 0} answers</p>
+                    <p>{q.upvotes?.length || 0} votes</p>
+                    <p>{q.answer?.length || 0} answers</p>
                   </div>
 
                   {/* Question Content */}
