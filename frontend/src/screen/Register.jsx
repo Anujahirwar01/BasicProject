@@ -49,7 +49,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+    <div className="min-h-screen  flex flex-col items-center justify-center">
       {/* Optional Header */}
       <Header />
 
