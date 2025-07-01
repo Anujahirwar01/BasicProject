@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 // import cors from "cors";
 
 app.use(cors({
-  origin: "http://localhost:5173", // ✅ Vite dev server default port
+  origin: "http://stackzone-anuj-web.netlify.app", // ✅ Vite dev server default port
   credentials: true,
 }));
 
