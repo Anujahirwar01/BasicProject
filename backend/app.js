@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 // import cors from "cors";
 
 app.use(cors({
-  origin: "https://stackzon.netlify.app",
-  credentials: true
+  origin: "http://localhost:5173", // ✅ Vite dev server default port
+  credentials: true,
 }));
 
 // Middleware for cookie parsing
