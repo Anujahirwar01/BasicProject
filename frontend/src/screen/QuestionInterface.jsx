@@ -15,7 +15,7 @@ const QuestionInterface = () => {
 
   const fetchQuestion = async () => {
     try {
-      const res = await axios.get(`http://basicproject-i8ua.onrender.com/questions/${id}`);
+      const res = await axios.get(`http://localhost:5000/questions/${id}`);
       setQuestion(res.data.question);
     } catch (err) {
       console.error(err);
@@ -25,7 +25,7 @@ const QuestionInterface = () => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get("http://basicproject-i8ua.onrender.com/users/profile", {
+      const res = await axios.get("http://localhost:5000/users/profile", {
         withCredentials: true,
       });
       setUserId(res.data.user._id);
@@ -42,7 +42,7 @@ const QuestionInterface = () => {
   const handleUpvote = async () => {
     try {
       await axios.post(
-        `http://basicproject-i8ua.onrender.com/questions/${id}/upvote`,
+        `http://localhost:5000/questions/${id}/upvote`,
         {},
         { withCredentials: true }
       );
@@ -55,7 +55,7 @@ const QuestionInterface = () => {
   const handleSubmitAnswer = async () => {
     try {
       await axios.post(
-        `http://basicproject-i8ua.onrender.com/questions/${id}/answer`,
+        `http://localhost:5000/questions/${id}/answer`,
         { answerText: answerBody },
         { withCredentials: true }
       );
@@ -69,7 +69,7 @@ const QuestionInterface = () => {
   const handleDeleteAnswer = async (answerId) => {
     try {
       await axios.delete(
-        `http://basicproject-i8ua.onrender.com/questions/${id}/answer/${answerId}`,
+        `http://localhost:5000/questions/${id}/answer/${answerId}`,
         { withCredentials: true }
       );
       fetchQuestion();

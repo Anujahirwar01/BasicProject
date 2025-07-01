@@ -31,7 +31,7 @@ const AskQuestionForm = () => {
 
     try {
       const res = await axios.post(
-        "http://basicproject-i8ua.onrender.com/questions/AskQuestion",
+        "http://localhost:5000/questions/AskQuestion",
         { title, description, tags },
         { withCredentials: true }
       );
