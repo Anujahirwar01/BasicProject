@@ -6,7 +6,7 @@ const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-gray-30 shadow-sm">
+    <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm">
       <div className="w-full h-[3px]" style={{ backgroundColor: "#EC8035" }} />
 
       <div className="px-50 py-3 flex items-center justify-between">

@@ -50,7 +50,7 @@ const Home = () => {
       <div className="flex justify-between p-10">
         {/* Left Section - Questions */}
         <div className="w-3/4">
-          <div className="flex justify-between ml-4 gap-0 items-center mb-6">
+          <div className="flex justify-between  gap-0 items-center mb-6">
             <h1 className="text-3xl ml-30 mt-4 font-semibold">All Questions</h1>
             <Link
               to="/AskQuestion"

@@ -12,7 +12,7 @@ const Home = () => {
     const fetchQuestions = async () => {
       try {
         const res = await axios.get("http://localhost:5000/questions");
-        setQuestions(res.data); // Make sure backend returns an array of questions
+        setQuestions(res.data);
       } catch (err) {
         console.error("Error fetching questions:", err);
       }
@@ -20,10 +20,26 @@ const Home = () => {
     fetchQuestions();
   }, []);
 
+  // Sort: highest votes → most words
+  const sortedQuestions = [...questions].sort((a, b) => {
+    const votesA = a.upvotes?.length || 0;
+    const votesB = b.upvotes?.length || 0;
+
+    if (votesB !== votesA) return votesB - votesA;
+
+    const wordCountA =
+      (a.title?.split(" ").length || 0) +
+      (a.description?.split(" ").length || 0);
+    const wordCountB =
+      (b.title?.split(" ").length || 0) +
+      (b.description?.split(" ").length || 0);
+
+    return wordCountB - wordCountA;
+  });
+
   const formatTimeAgo = (dateString) => {
     const date = new Date(dateString);
     const seconds = Math.floor((new Date() - date) / 1000);
-
     const intervals = [
       { label: "year", seconds: 31536000 },
       { label: "month", seconds: 2592000 },
@@ -48,10 +64,10 @@ const Home = () => {
       <Navbar />
 
       <div className="flex justify-between p-10">
-        {/* Left Section - Questions */}
+        {/* Left Section */}
         <div className="w-3/4">
-          <div className="flex justify-between ml-4 gap-0 items-center mb-6">
-            <h1 className="text-3xl ml-30 mt-4 font-semibold">Top Questions</h1>
+          <div className="flex justify-between items-center ml-30 mb-6">
+            <h1 className="text-3xl font-semibold mt-4">Top Questions</h1>
             <Link
               to="/AskQuestion"
               className="bg-blue-500 hover:bg-blue-600 mt-5 text-white px-7 py-2 rounded"
@@ -63,21 +79,20 @@ const Home = () => {
           <p className="mb-1">{questions.length} questions</p>
 
           <div className="space-y-4">
-            {questions.map((q) => (
+            {sortedQuestions.map((q) => (
               <div
                 key={q._id}
-                className="flex flex-col ml-20 bg-yellow-50 border-b py-4 px-6 w-full hover:bg-yellow-100 transition"
+                className="flex flex-col bg-yellow-50 border-b py-4 px-6 ml-20 w-full hover:bg-yellow-100 transition"
               >
                 <div className="flex items-start space-x-6">
-                  {/* Stats */}
+                  {/* Votes & Answers */}
                   <div className="w-1/6 text-sm ml-40 text-gray-700 text-center">
-                    <p>{q.upVotes?.length || 0} votes</p>
-                    <p>{q.answers?.length || 0} answers</p>
+                    <p>{q.upvotes?.length || 0} votes</p>
+                    <p>{q.answer?.length || 0} answers</p>
                   </div>
 
-                  {/* Question Content */}
+                  {/* Content */}
                   <div className="w-5/6">
-                    {/* Question Title Link */}
                     <Link
                       to={`/question/${q._id}`}
                       className="text-blue-700 text-lg font-semibold hover:underline"
@@ -97,7 +112,7 @@ const Home = () => {
                       ))}
                     </div>
 
-                    {/* Meta Info */}
+                    {/* Meta */}
                     <p className="text-xs text-gray-600 mt-2">
                       asked {formatTimeAgo(q.askedOn)} by{" "}
                       {q.userPosted?.name || q.userPosted || "anonymous"}
@@ -109,7 +124,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Right Section - Sidebar */}
+        {/* Sidebar */}
         <div className="w-1/4 mr-12.5 mt-5 pl-6">
           <Sidebar />
         </div>
