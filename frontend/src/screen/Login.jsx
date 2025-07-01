@@ -22,7 +22,7 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/users/login",
+        "http://backend-service-6o5m.onrender.com/users/login",
         { email, password },
         { withCredentials: true }
       );

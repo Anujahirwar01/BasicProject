@@ -13,7 +13,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/users/${id}`, { withCredentials: true })
+      .get(`http://backend-service-6o5m.onrender.com/users/${id}`, { withCredentials: true })
       .then((res) => setUser(res.data.user))
       .catch((err) => {
         console.error(err);

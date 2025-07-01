@@ -20,7 +20,7 @@ const EditProfile = () => {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/users/${user._id}`,
+        `http://backend-service-6o5m.onrender.com/users/${user._id}`,
         {
           name,
           description,
