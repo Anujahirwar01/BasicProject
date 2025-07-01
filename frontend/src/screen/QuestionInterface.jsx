@@ -15,7 +15,7 @@ const QuestionInterface = () => {
 
   const fetchQuestion = async () => {
     try {
-      const res = await axios.get(`https://backend-service-6o5m.onrender.com/questions/${id}`);
+      const res = await axios.get(`https://backend-service-6o5m.onrender.com/questions/${id}`,{ withCredentials: true });
       setQuestion(res.data.question);
     } catch (err) {
       console.error(err);
