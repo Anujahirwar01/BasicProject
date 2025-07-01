@@ -1,3 +1,4 @@
+// middleware/auth.middleware.js
 import jwt from "jsonwebtoken";
 import userModel from "../model/user.model.js";
 
@@ -5,23 +6,23 @@ export const authMiddleware = async (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(401).json({ error: 'Access token required' });
+    return res.status(401).json({ error: "Unauthorized - No token" });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await userModel.findOne({ email: decoded.email });
+    const user = await userModel.findById(decoded.id);
     if (!user) {
-      return res.status(401).json({ error: 'User not found' });
+      return res.status(401).json({ error: "Unauthorized - Invalid user" });
     }
 
-    req.user = user;             // full user object
-    req.userId = user._id;       // ✅ this is what controller expects
+    req.userId = user._id;
+    req.user = user;
 
     next();
-  } catch (error) {
-    console.error('JWT verification error:', error);
-    return res.status(401).json({ error: 'Invalid or expired token' });
+  } catch (err) {
+    console.error("JWT verification failed:", err);
+    return res.status(401).json({ error: "Unauthorized - Invalid token" });
   }
 };
