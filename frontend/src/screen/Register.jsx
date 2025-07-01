@@ -29,13 +29,13 @@ const Register = () => {
 
     try {
       await axios.post(
-        "http://backend-service-6o5m.onrender.com/users/register",
+        "https://backend-service-6o5m.onrender.com/users/register",
         { name, email, password },
         { withCredentials: true }
       );
 
       const res = await axios.post(
-        "http://backend-service-6o5m.onrender.com/users/login",
+        "https://backend-service-6o5m.onrender.com/users/login",
         { email, password },
         { withCredentials: true }
       );

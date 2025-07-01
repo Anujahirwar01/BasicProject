@@ -15,7 +15,7 @@ const QuestionInterface = () => {
 
   const fetchQuestion = async () => {
     try {
-      const res = await axios.get(`http://backend-service-6o5m.onrender.com/questions/${id}`);
+      const res = await axios.get(`https://backend-service-6o5m.onrender.com/questions/${id}`);
       setQuestion(res.data.question);
     } catch (err) {
       console.error(err);
@@ -25,7 +25,7 @@ const QuestionInterface = () => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get("http://backend-service-6o5m.onrender.com/users/profile", {
+      const res = await axios.get("https://backend-service-6o5m.onrender.com/users/profile", {
         withCredentials: true,
       });
       setUserId(res.data.user._id);
@@ -42,7 +42,7 @@ const QuestionInterface = () => {
   const handleUpvote = async () => {
     try {
       await axios.post(
-        `http://backend-service-6o5m.onrender.com/questions/${id}/upvote`,
+        `https://backend-service-6o5m.onrender.com/questions/${id}/upvote`,
         {},
         { withCredentials: true }
       );
@@ -55,7 +55,7 @@ const QuestionInterface = () => {
   const handleSubmitAnswer = async () => {
     try {
       await axios.post(
-        `http://backend-service-6o5m.onrender.com/questions/${id}/answer`,
+        `https://backend-service-6o5m.onrender.com/questions/${id}/answer`,
         { answerText: answerBody },
         { withCredentials: true }
       );
@@ -69,7 +69,7 @@ const QuestionInterface = () => {
   const handleDeleteAnswer = async (answerId) => {
     try {
       await axios.delete(
-        `http://backend-service-6o5m.onrender.com/questions/${id}/answer/${answerId}`,
+        `https://backend-service-6o5m.onrender.com/questions/${id}/answer/${answerId}`,
         { withCredentials: true }
       );
       fetchQuestion();
