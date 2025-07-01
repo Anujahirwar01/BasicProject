@@ -29,13 +29,13 @@ const Register = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/users/register",
+        "http://basicproject-i8ua.onrender.com/users/register",
         { name, email, password },
         { withCredentials: true }
       );
 
       const res = await axios.post(
-        "http://localhost:5000/users/login",
+        "http://basicproject-i8ua.onrender.com/users/login",
         { email, password },
         { withCredentials: true }
       );

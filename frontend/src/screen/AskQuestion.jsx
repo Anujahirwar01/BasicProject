@@ -31,10 +31,11 @@ const AskQuestionForm = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/questions/AskQuestion",
+        "http://basicproject-i8ua.onrender.com/questions/AskQuestion",
         { title, description, tags },
         { withCredentials: true }
       );
+      
       console.log("Success:", res.data);
       navigate("/"); // redirect to homepage
     } catch (err) {

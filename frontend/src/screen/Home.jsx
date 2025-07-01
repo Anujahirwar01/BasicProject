@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/questions");
+        const res = await axios.get("http://basicproject-i8ua.onrender.com/questions");
         setQuestions(res.data); // Make sure backend returns an array of questions
       } catch (err) {
         console.error("Error fetching questions:", err);

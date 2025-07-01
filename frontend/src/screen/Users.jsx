@@ -8,7 +8,7 @@ const Users = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/users", { withCredentials: true })
+    axios.get("http://basicproject-i8ua.onrender.com/users", { withCredentials: true })
       .then((res) => setUsers(res.data.users))
       .catch((err) => console.error(err));
   }, []);
