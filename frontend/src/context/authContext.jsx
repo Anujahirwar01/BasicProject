@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/users/profile", { withCredentials: true })
+      .get("https://backend-service-6o5m.onrender.com/users/profile", { withCredentials: true })
       .then((res) => setUser(res.data.user))
       .catch((err) => {
         console.error("Auth check failed: ", err);
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
   try {
-    await axios.get("http://localhost:5000/users/logout", {
+    await axios.get("https://backend-service-6o5m.onrender.com/users/logout", {
       withCredentials: true,
     });
     setUser(null);
