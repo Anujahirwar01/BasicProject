@@ -1,28 +1,44 @@
-import jwt from 'jsonwebtoken';
-import userModel from '../model/user.model.js';
+import { Router } from 'express';
+import * as userController from '../controller/user.controller.js';
+import { body } from 'express-validator';
+import * as authMiddleware from '../middleware/auth.middleware.js';
 
-export const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
+const router = Router();
 
-  if (!token) {
-    return res.status(401).json({ error: "Unauthorized - No token provided" });
-  }
+// REGISTER
+router.post(
+  '/register',
+  [
+    body('name').notEmpty().withMessage('Name is required')
+      .isLength({ min: 2 }).withMessage('Name must be at least 2 characters long'),
+    body('email').isEmail().withMessage('Invalid email address'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  ],
+  userController.createUserController
+);
 
-  try {
-    // ✅ Decode token (must include _id in the payload)
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+// LOGIN
+router.post(
+  '/login',
+  [
+    body('email').isEmail().withMessage('Invalid email address'),
+    body('password').exists().withMessage('Password is required'),
+  ],
+  userController.loginUserController
+);
 
-    const user = await userModel.findById(decoded._id);
-    if (!user) {
-      return res.status(401).json({ error: "Unauthorized - Invalid user" });
-    }
+// UPDATE USER (Protected)
+router.put('/:id', authMiddleware.authMiddleware, userController.updateUserController);
 
-    req.userId = user._id;
-    req.user = user;
+// GET ALL USERS
+router.get("/", userController.getAllUsersController);
 
-    next(); // 🚀 proceed to next middleware/route
-  } catch (err) {
-    console.error("JWT verification failed:", err.message);
-    return res.status(401).json({ error: "Unauthorized - Invalid token" });
-  }
-};
+// ✅ STATIC ROUTES FIRST
+router.get('/profile', authMiddleware.authMiddleware, userController.getUserProfileController);
+
+router.get('/logout', userController.logoutUserController);
+
+// ✅ DYNAMIC ROUTE LAST
+router.get('/:id', userController.getUserByIdController);
+
+export default router;
