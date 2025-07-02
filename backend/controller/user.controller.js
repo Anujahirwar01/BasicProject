@@ -149,8 +149,8 @@ export const logoutUserController = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      sameSite: "Lax",
-      secure: false, // should be true in production
+      sameSite: "None",
+      secure: true, // should be true in production
     });
 
     return res.status(200).json({ message: "Logged out successfully" });
