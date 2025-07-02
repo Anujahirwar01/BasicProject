@@ -18,10 +18,25 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware for CORS
 // import cors from "cors";
 
+// import cors from "cors";
+
+const allowedOrigins = [
+  "http://localhost:5173", // ✅ Dev frontend
+  "https://stackzone-ak.netlify.app" // ✅ Production frontend
+];
+
 app.use(cors({
-  origin: "https://stackzone-ak.netlify.app", // ✅ Vite dev server default port
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman) or from allowed origins
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
+
 
 // Middleware for cookie parsing
 app.use(cookieParser());
