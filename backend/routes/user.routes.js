@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as userController from '../controller/user.controller.js';
 import { body } from 'express-validator';
-import * as authMiddleware from '../middleware/auth.middleware.js';
+import authMiddleware from '../middleware/auth.middleware.js';
 
 const router = Router();
 
@@ -28,13 +28,13 @@ router.post(
 );
 
 // UPDATE USER (Protected)
-router.put('/:id', authMiddleware.authMiddleware, userController.updateUserController);
+router.put('/:id', authMiddleware, userController.updateUserController);
 
 // GET ALL USERS
 router.get("/", userController.getAllUsersController);
 
 // ✅ STATIC ROUTES FIRST
-router.get('/profile', authMiddleware.authMiddleware, userController.getUserProfileController);
+router.get('/profile', authMiddleware, userController.getUserProfileController);
 
 router.get('/logout', userController.logoutUserController);
 
