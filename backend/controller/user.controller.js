@@ -59,8 +59,7 @@ export const loginUserController = async (req, res) => {
         httpOnly: true,
         secure: true, // set true in production (HTTPS)
         sameSite: 'None',
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
-        domain: '.onrender.com' 
+        maxAge: 24 * 60 * 60 * 1000, // 1 day 
       })
       .status(200)
       .json({ user });
