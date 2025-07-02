@@ -1,44 +1,28 @@
-import { Router } from 'express';
-import * as userController from '../controller/user.controller.js';
-import { body } from 'express-validator';
-import * as authMiddleware from '../middleware/auth.middleware.js';
+import jwt from 'jsonwebtoken';
+import userModel from '../model/user.model.js';
 
-const router = Router();
+export const authMiddleware = async (req, res, next) => {
+  const token = req.cookies.token;
 
-// REGISTER
-router.post(
-  '/register',
-  [
-    body('name').notEmpty().withMessage('Name is required')
-      .isLength({ min: 2 }).withMessage('Name must be at least 2 characters long'),
-    body('email').isEmail().withMessage('Invalid email address'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-  ],
-  userController.createUserController
-);
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized - No token provided" });
+  }
 
-// LOGIN
-router.post(
-  '/login',
-  [
-    body('email').isEmail().withMessage('Invalid email address'),
-    body('password').exists().withMessage('Password is required'),
-  ],
-  userController.loginUserController
-);
+  try {
+    // ✅ Decode token (must include _id in the payload)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-// UPDATE USER (Protected)
-router.put('/:id', authMiddleware.authMiddleware, userController.updateUserController);
+    const user = await userModel.findById(decoded._id);
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized - Invalid user" });
+    }
 
-// GET ALL USERS
-router.get("/", userController.getAllUsersController);
+    req.userId = user._id;
+    req.user = user;
 
-// ✅ STATIC ROUTES FIRST
-router.get('/profile', authMiddleware.authMiddleware, userController.getUserProfileController);
-
-router.get('/logout', userController.logoutUserController);
-
-// ✅ DYNAMIC ROUTE LAST
-router.get('/:id', userController.getUserByIdController);
-
-export default router;
+    next(); // 🚀 proceed to next middleware/route
+  } catch (err) {
+    console.error("JWT verification failed:", err.message);
+    return res.status(401).json({ error: "Unauthorized - Invalid token" });
+  }
+};

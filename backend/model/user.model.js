@@ -50,12 +50,9 @@ userSchema.methods.isValidPassword = async function (password) {
 }
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign(
-    { _id: this._id, email: this.email }, // ✅ include _id
-    process.env.JWT_SECRET,
-    { expiresIn: '24h' }
-  );
-  return token;
+  return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: '24h'
+  });
 };
 
 const User = mongoose.model("User", userSchema);
