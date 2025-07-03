@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Header from "../layouts/header";
 import Navbar from "../layouts/navbar";
 import Sidebar from "../layouts/rightnavbar";
+import Footer from "../layouts/footer";
 
 const Home = () => {
   const [questions, setQuestions] = useState([]);
@@ -11,8 +12,10 @@ const Home = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await axios.get("https://backend-service-6o5m.onrender.com/questions",{ withCredentials: true });
-        setQuestions(res.data); // Make sure backend returns an array of questions
+        const res = await axios.get("https://backend-service-6o5m.onrender.com/questions", {
+          withCredentials: true,
+        });
+        setQuestions(res.data);
       } catch (err) {
         console.error("Error fetching questions:", err);
       }
@@ -43,14 +46,14 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header />
       <Navbar />
-
-      <div className="flex justify-between p-10">
+      {/* Main content area that will grow to push footer down */}
+      <main className="flex-grow flex justify-between p-10">
         {/* Left Section - Questions */}
         <div className="w-3/4">
-          <div className="flex justify-between  gap-0 items-center mb-6">
+          <div className="flex justify-between gap-0 items-center mb-6">
             <h1 className="text-3xl ml-30 mt-4 font-semibold">All Questions</h1>
             <Link
               to="/AskQuestion"
@@ -77,7 +80,6 @@ const Home = () => {
 
                   {/* Question Content */}
                   <div className="w-5/6">
-                    {/* Question Title Link */}
                     <Link
                       to={`/question/${q._id}`}
                       className="text-blue-700 text-lg font-semibold hover:underline"
@@ -85,7 +87,6 @@ const Home = () => {
                       {q.title}
                     </Link>
 
-                    {/* Tags */}
                     <div className="mt-2 flex flex-wrap gap-2">
                       {q.tags.map((tag, i) => (
                         <span
@@ -97,7 +98,6 @@ const Home = () => {
                       ))}
                     </div>
 
-                    {/* Meta Info */}
                     <p className="text-xs text-gray-600 mt-2">
                       asked {formatTimeAgo(q.askedOn)} by{" "}
                       {q.userPosted?.name || q.userPosted || "anonymous"}
@@ -113,7 +113,10 @@ const Home = () => {
         <div className="w-1/4 mr-12.5 mt-5 pl-6">
           <Sidebar />
         </div>
-      </div>
+      </main>
+
+      {/* Footer - will stick to bottom */}
+      <Footer className='ml-90'/>
     </div>
   );
 };
