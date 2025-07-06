@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../layouts/header";
 import Navbar from "../layouts/navbar";
@@ -13,9 +12,14 @@ const QuestionInterface = () => {
   const [answerBody, setAnswerBody] = useState("");
   const [userId, setUserId] = useState("");
 
+  const [aiAnswer, setAiAnswer] = useState("");
+  const [loadingAI, setLoadingAI] = useState(false);
+
   const fetchQuestion = async () => {
     try {
-      const res = await axios.get(`https://backend-service-6o5m.onrender.com/questions/${id}`,{ withCredentials: true });
+      const res = await axios.get(`https://backend-service-6o5m.onrender.com/questions/${id}`, {
+        withCredentials: true,
+      });
       setQuestion(res.data.question);
     } catch (err) {
       console.error(err);
@@ -78,6 +82,22 @@ const QuestionInterface = () => {
     }
   };
 
+  const handleAskAI = async () => {
+    setLoadingAI(true);
+    try {
+      const res = await axios.post(
+        "https://backend-service-6o5m.onrender.com/ai/generate",
+        { question: question.title },
+        { withCredentials: true }
+      );
+      setAiAnswer(res.data.answer);
+    } catch (err) {
+      setAiAnswer("Something went wrong. Try again later.");
+    } finally {
+      setLoadingAI(false);
+    }
+  };
+
   if (error) return <p className="text-red-600 text-center mt-8">{error}</p>;
   if (!question) return <p className="text-center mt-8">Loading...</p>;
 
@@ -98,9 +118,7 @@ const QuestionInterface = () => {
               >
                 ▲
               </button>
-              <p className="text-lg font-semibold">
-                {question.upvotes?.length || 0}
-              </p>
+              <p className="text-lg font-semibold">{question.upvotes?.length || 0}</p>
               <button
                 className="text-2xl font-bold hover:text-red-600 transition"
                 title="Downvote"
@@ -111,12 +129,8 @@ const QuestionInterface = () => {
 
             {/* Question */}
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-900">
-                {question.title}
-              </h1>
-              <p className="mt-4 text-gray-700 leading-relaxed">
-                {question.description}
-              </p>
+              <h1 className="text-3xl font-bold text-gray-900">{question.title}</h1>
+              <p className="mt-4 text-gray-700 leading-relaxed">{question.description}</p>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {question.tags.map((tag, i) => (
@@ -145,13 +159,8 @@ const QuestionInterface = () => {
             <h2 className="text-xl font-semibold mb-4">Answers</h2>
             {question.answer.length > 0 ? (
               question.answer.map((ans, i) => (
-                <div
-                  key={i}
-                  className="bg-white shadow border p-4 rounded-lg mb-4"
-                >
-                  <p className="text-gray-800 leading-relaxed">
-                    {ans.answerBody}
-                  </p>
+                <div key={i} className="bg-white shadow border p-4 rounded-lg mb-4">
+                  <p className="text-gray-800 leading-relaxed">{ans.answerBody}</p>
                   <p className="text-xs text-gray-500 mt-2">
                     Answered by {ans.userAnswered || "Anonymous"} on{" "}
                     {new Date(ans.answeredOn).toLocaleString()}
@@ -167,7 +176,27 @@ const QuestionInterface = () => {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500">No answers yet.</p>
+              <div className="text-gray-500">
+                <p>No answers yet.</p>
+
+                <button
+                  onClick={handleAskAI}
+                  className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                >
+                  🤖 Ask AI
+                </button>
+
+                {loadingAI && (
+                  <p className="mt-2 text-sm text-gray-400">Generating answer...</p>
+                )}
+
+                {aiAnswer && (
+                  <div className="mt-4 p-4 bg-blue-50 border border-blue-300 rounded">
+                    <h4 className="font-semibold mb-2">AI-generated answer:</h4>
+                    <p className="text-gray-800">{aiAnswer}</p>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
@@ -190,16 +219,13 @@ const QuestionInterface = () => {
               >
                 Post Your Answer
               </button>
-             
             </div>
-<p>
-  Browse another tagged question of{" "}
-  <span className="font-semibold">
-    {question.tags?.[0] || "this topic"}
-  </span>{" "}
-  or{" "}
-  <Link to='/AskQuestion' className="text-blue-500">ask another question?</Link>
-</p>
+
+            <p className="mt-4 text-sm text-gray-600">
+              Browse another tagged question of{" "}
+              <span className="font-semibold">{question.tags?.[0] || "this topic"}</span>{" "}
+              or <Link to="/AskQuestion" className="text-blue-500">ask another question?</Link>
+            </p>
           </div>
         </div>
 

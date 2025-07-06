@@ -116,7 +116,7 @@ const Home = () => {
       </main>
 
       {/* Footer - will stick to bottom */}
-      <Footer className='ml-90'/>
+      {/* <Footer className='ml-90'/> */}
     </div>
   );
 };
