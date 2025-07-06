@@ -6,7 +6,10 @@ import questionRoutes from './routes/questions.routes.js';
 import userRoutes from './routes/user.routes.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import aiRoutes from "./routes/ai.routes.js";
 const app = express();
+
+
 
 
 // Connect to the database
@@ -46,7 +49,7 @@ app.use("/users", userRoutes); //
 app.use('/questions', questionRoutes); // ✅ endpoint will be /questions/AskQuestion
 // app.use('/questions', questionRoutes);
 
-
+app.use("/ai", aiRoutes);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 }
