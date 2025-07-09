@@ -23,10 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // import cors from "cors";
 
-const allowedOrigins = [
-  "http://localhost:5173", // ✅ Dev frontend
-  "https://stackzone-ak.netlify.app" // ✅ Production frontend
-];
+
 
 app.use(cors({
   origin: "https://stackzone-ak.netlify.app",
